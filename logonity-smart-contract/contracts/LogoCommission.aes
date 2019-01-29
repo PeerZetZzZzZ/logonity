@@ -1,0 +1,48 @@
+contract Logonity =
+  record logoProposal = {
+     author: address,
+     logoMd5: string }
+
+  record commission = {
+    commissionMd5Hash: string,
+    principal: address,
+    logoDescription: string,
+    submittedProposals: list(logoProposal) }
+
+  record state = {
+    commissionMd5Hash: string,
+    principal: address,
+    logoDescription: string,
+    submittedProposals: list(logoProposal),
+    reward: int }
+
+  public function init(commissionMd5Hash: string, logoDescription: string) : state =
+    { commissionMd5Hash = commissionMd5Hash,
+      principal = Call.caller,
+      logoDescription = logoDescription,
+      submittedProposals = [],
+      reward = Call.value }
+
+  public stateful function submitProposal(logoMd5: string) =
+    put(state{submittedProposals = {author = Call.caller, logoMd5 = logoMd5}::state.submittedProposals})
+
+
+  public stateful function chooseWinningLogo(winningLogoMd5:string) =
+    if (Call.caller == state.principal)
+      switch(findTheLogo(state.submittedProposals, winningLogoMd5))
+        [] => sendReward(state.principal)
+        head::tail => sendReward(head.author)
+    else
+      abort("Only principal can choose the winning logo!")
+
+  private function findTheLogo(submittedProposals: list(logoProposal), winningLogoMd5: string) :list(logoProposal) =
+     switch(submittedProposals)
+       [] => []
+       head::tail =>
+         if(head.logoMd5 == winningLogoMd5)
+           head::[]
+         else
+           findTheLogo(tail, winningLogoMd5)
+
+  private function sendReward(recipient:address) =
+  	  Chain.spend(state.principal, state.reward)
