@@ -14,8 +14,12 @@
     <br>
     <div class="row justify-end">
       <div class="column">
-        <p><b>Available balance: </b>{{availableBalance}} Ae</p>
-        <p><b>Balance after: </b>{{balanceAfter}} Ae</p>
+        <q-chip icon-right="attach_money" color="primary" small>
+          Available balance: {{availableBalance}} Ae
+        </q-chip>
+        <q-chip icon-right="attach_money" color="secondary" small>
+          Balance after: {{balanceAfter}} Ae
+        </q-chip>
 
       </div>
     </div>
@@ -29,7 +33,8 @@
         <q-item-separator></q-item-separator>
         <q-field
           label="Private key"
-          helper="Your Aeternity account private key - don't worry this information will not leave outside your browser.">
+          helper="Your Aeternity account private key -
+          don't worry this information will not leave outside your browser.">
           <q-input type="password" v-model="privKey" />
         </q-field>
         <q-item-separator></q-item-separator>
@@ -106,40 +111,29 @@ export default {
   },
   methods: {
     showCommissionCreatedDialog(contractAddress) {
-      this.$q.dialog({
-        title: 'Commission created!',
-        message: `Your commission has been uploaded to the network. Contract address: ${contractAddress}`
-      });
+      this.showMessageDialog('Commission created!',
+        `Your commission has been uploaded to the network. Contract address: ${contractAddress}`);
     },
     showCommissionFailedDialog(contractAddress) {
-      this.$q.dialog({
-        title: 'Commission creation failed!',
-        message: `Your commission has been uploaded to the network. Contract address: ${contractAddress}`
-      });
+      this.showMessageDialog('Commission creation failed!',
+        `Your commission has been uploaded to the network. Contract address: ${contractAddress}`);
     },
     showIsNotIntegerDialog(value) {
-      this.$q.dialog({
-        title: 'Given reward is not integer value!',
-        message: `The reward ${value} Ae must be integer. Please fix it.`
-      });
+      this.showMessageDialog('Given reward is not integer value!',
+        `The reward ${value} Ae must be integer. Please fix it.`);
     },
     createSubmission() {
       if (!Number.isInteger(Number(this.reward))) {
         this.showIsNotIntegerDialog(this.reward);
       } else {
         this.get('/api/createCommission').subscribe((res) => {
-          Ae({
-            debug: true,
-            url: 'https://sdk-testnet.aepps.com',
-            internalUrl: 'https://sdk-testnet.aepps.com',
-            accounts: [
-              MemoryAccount({keypair: {secretKey: this.privKey, publicKey: this.pubKey}})
-            ],
-          }).then(ae => {
-            this.ae = ae;
+          this.getAe({keypair: {secretKey: this.privKey, publicKey: this.pubKey}}, (ae) => {
             return ae.contractCompile(LogonityContractCode);
           }).then(bytecode => {
-            return bytecode.deploy({initState: `("${res.data.id}", "${this.logoDescription}")`, options: { amount: this.toAeInt(this.reward) }});
+            return bytecode.deploy({
+              initState: `("${res.data.id}", "${this.logoDescription}")`,
+              options: {amount: this.toAeInt(this.reward)}
+            });
           }).then(deployed => {
             this.post('/api/updateCreatedCommission', {
               contractAddress: deployed.address,
@@ -152,9 +146,34 @@ export default {
               this.showCommissionFailedDialog(deployed.address);
             });
             console.log(`Contract deployed at ${JSON.stringify(deployed)}`);
-
           });
-        })
+        });
+          // Ae({
+          //   debug: true,
+          //   url: 'https://sdk-testnet.aepps.com',
+          //   internalUrl: 'https://sdk-testnet.aepps.com',
+          //   accounts: [
+          //     MemoryAccount()
+          //   ],
+          // }).then(ae => {
+          //   this.ae = ae;
+          //   return ae.contractCompile(LogonityContractCode);
+          // }).then(bytecode => {
+          //   return bytecode.deploy({initState: `("${res.data.id}", "${this.logoDescription}")`, options: { amount: this.toAeInt(this.reward) }});
+          // }).then(deployed => {
+          //   this.post('/api/updateCreatedCommission', {
+          //     contractAddress: deployed.address,
+          //     logoDescription: this.logoDescription,
+          //     transactionHash: deployed.transaction,
+          //     id: res.data.id
+          //   }).subscribe((res) => {
+          //     this.showCommissionCreatedDialog(deployed.address);
+          //   }, (err) => {
+          //     this.showCommissionFailedDialog(deployed.address);
+          //   });
+          //   console.log(`Contract deployed at ${JSON.stringify(deployed)}`);
+          //
+          // });
       }
     }
   }

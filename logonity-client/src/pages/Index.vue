@@ -5,19 +5,33 @@
         <img src="../assets/activeLogoCommissions2.png">
       </div>
     </div>
-    <q-list highlight color="primary" separator v-show="activeCommissions.length !== 0">
-      <q-list-header class="secondaryColor">Current logo commissions</q-list-header>
-        <q-item v-for="activeCommission in activeCommissions" :key="activeCommission.id">
-          <q-item-main class="primaryColor">
-            <q-item-tile><span class="secondaryColor"><b>Commission description: </b></span> <span class="primaryColor"><b>{{activeCommission.logo_description}}</b></span></q-item-tile> <br>
-            <span class="secondaryColor">Contract address: </span> <span class="primaryColor">{{activeCommission.contract_address}}</span><br>
-            <span class="secondaryColor">Creation date: </span> <span class="primaryColor">{{activeCommission.creation_time}}</span> <br>
-            <span class="secondaryColor">Transaction: </span> <span class="primaryColor">{{activeCommission.transaction_hash}}</span> <br>
-            <span class="secondaryColor">Reward: </span> <span class="primaryColor">{{toAeFromAettos(activeCommission.reward)}} Ae</span>
-          </q-item-main>
-          <q-btn color="primary" label="Submit logo" to="/submitNewLogo"></q-btn>
-        </q-item>
-    </q-list>
+    <div class="row justify-center">
+      <div class="col-12">
+        <q-list highlight color="primary" separator v-show="activeCommissions.length !== 0">
+          <q-item v-for="activeCommission in activeCommissions"
+                  :key="activeCommission.id"
+                  :to="{ path: `/logoInfo/${activeCommission.id}`}">
+            <q-item-main class="primaryColor">
+              <q-item-tile>
+                <span class="secondaryColor">
+                  <b>Commission description: </b>
+                </span>
+                <span class="primaryColor">
+                  <b>{{activeCommission.logo_description}}</b>
+                </span>
+              </q-item-tile>
+              <br>
+              <q-chip icon="access_time" color="primary" small square>
+                Created: {{formatDate(activeCommission.creation_time)}}
+              </q-chip>
+            </q-item-main>
+            <q-chip icon-right="attach_money" color="primary" small>
+              Reward: {{activeCommission.reward}} Ae
+            </q-chip>
+          </q-item>
+        </q-list>
+      </div>
+    </div>
     <div class="row justify-center" v-show="activeCommissions.length === 0">
       <div class="column">
         <q-spinner-audio color="secondary" :size="76"/>
@@ -33,6 +47,8 @@
 /*eslint-disable */
 import MemoryAccount from '@aeternity/aepp-sdk/es/account/memory'
 import Ae from '@aeternity/aepp-sdk/es/ae/universal' // or any other flavor
+import * as Crypto from '@aeternity/aepp-sdk/es/utils/crypto' // or any other flavor
+
 
 import Mixin from '../mixins/global-mixin'
 export default {
@@ -43,32 +59,44 @@ export default {
       activeCommissions: [],
     };
   },
-  mounted() {
-    this.get('/api/activeCommissions').subscribe((res) => {
+  methods: {
+    goToSubmitLogo(contractAddress) {
+      this.$router.push(`/submitNewLogo/${contractAddress}`);
+    },
+    chooseLogo(contractAddress) {
       Ae({
         debug: true,
         url: 'https://sdk-testnet.aepps.com',
         internalUrl: 'https://sdk-testnet.aepps.com',
+        accounts: [
+          MemoryAccount({
+            keypair: {
+              publicKey: 'ak_2igXQ7pQgH5YDv4zP9ciq1R3qW8pNaGgywqYnwRPrBhKhYxgeG',
+              secretKey: '02a9f1e976b83b5cdf34279e9068fc7f352a5b49144fd96e7546390ff20a7a14e256c3ecea141842c37f9686fa0558faf71388dc473f5d69891d9ea2ee2cb671'
+            }
+          })
+        ],
       }).then(ae => {
+        ae.contractCall(contractAddress, 'sophia-address', contractAddress, 'chooseWonLogo', {args: '("asdf")'})
+          .then(result => {
+            console.log('udalo sie', result);
+          });
+      });
+    },
+  },
+  mounted() {
+    this.get('/api/activeCommissions').subscribe((res) => {
+      this.getAe(null, (ae) => {
         res.data.forEach(activeCommission => {
           ae.contractCallStatic(activeCommission.contract_address, 'sophia-address', 'getReward')
             .then(result => {
               ae.contractDecodeData('int', result.result).then(res => {
-                activeCommission.reward = res.value;
+                console.log(activeCommission.logo_description, this.toAeFromAettos(res.value));
+                activeCommission.reward = this.toAeFromAettos(res.value);
                 this.activeCommissions.push(activeCommission);
               });
             });
         });
-        // const result = await ae.contractCallStatic(activeCommission.contract_address, 'sophia-address', 'getReward');
-        // console.log('Mam ten result: ', ae.contractDecodeData('string', result.result).then(res => console.log('Tadam:', res)));
-        // getting the balance of a public address
-        // ae.balance(this.pubKey).then(balance => {
-        //   // logs current balance of "A_PUB_ADDRESS"
-        //   console.log('balance', balance)
-        // }).catch(e => {
-        //   // logs error
-        //   console.log(e)
-        // })
       });
     });
 

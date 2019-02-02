@@ -11,9 +11,12 @@
 
           <img class="cursorPointer" src="../assets/logonityLogo.png" @click="$router.push('/')">
         <q-toolbar-title>
-          <div slot="subtitle">Logonity - decentralized logo marketplace built on Aeternity blockchain.</div>
+          <div slot="subtitle">
+            Logonity - decentralized logo marketplace built on Aeternity blockchain.
+          </div>
         </q-toolbar-title>
-        <q-btn to="/submitNewLogoCommission" label="Add commission" color="secondary" @click="leftSide = !leftSide"/>
+        <q-btn to="/submitNewLogoCommission"
+               label="Add commission" color="secondary" @click="leftSide = !leftSide"/>
       </q-toolbar>
     </q-layout-header>
 
@@ -38,19 +41,19 @@
 </template>
 
 <script>
-import { openURL } from 'quasar'
+import { openURL } from 'quasar';
 
 export default {
   name: 'MyLayout',
-  data () {
+  data() {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
-    }
+      leftDrawerOpen: this.$q.platform.is.desktop,
+    };
   },
   methods: {
-    openURL
-  }
-}
+    openURL,
+  },
+};
 </script>
 
 <style>

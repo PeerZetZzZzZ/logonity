@@ -36,3 +36,25 @@ exports.updateLogoCommission = (logoCommissionObject, onSucceedCallback, onFailu
     }
   )
 };
+
+exports.saveLogoProposal = (commissionId, logoComment, pictureOriginalName, pictureName, pictureMimeType, pictureSize, onSucceedCallback, onFailureCallback) => {
+  const id = uuidv1();
+  db.pool.query('INSERT INTO LOGO_PROPOSAL(ID, LOGO_COMMENT, LOGO_COMMISSION_ID, PICTURE_ORIGINAL_NAME, PICTURE_NAME, PICTURE_MIME_TYPE, PICTURE_SIZE) VALUES($1, $2, $3, $4, $5, $6, $7)',
+    [id,
+      logoComment,
+      commissionId,
+      pictureOriginalName,
+      pictureName,
+      pictureMimeType,
+      pictureSize],
+    (err) => {
+      if (err) {
+        console.log(`Failed to insert logo commission!`, err);
+        onFailureCallback();
+      } else {
+        console.log(`Inserted new logo commission!`);
+        onSucceedCallback(id);
+      }
+    }
+  )
+};

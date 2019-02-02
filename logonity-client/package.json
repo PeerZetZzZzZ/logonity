@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aeternity/aepp-sdk": "^1.2.1",
+    "@vue/eslint-config-airbnb": "^4.0.0",
     "axios": "^0.18.0",
     "moment": "^2.24.0",
     "rxjs": "^6.3.3",

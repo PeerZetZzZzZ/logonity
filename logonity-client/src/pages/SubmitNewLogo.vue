@@ -5,44 +5,18 @@
         <div class="q-display-3 text-center">
           Submit your logo
         </div>
-        <div class="q-display-1 text-center">
-          Upload the logo file (allowed formats <b>.jpg, .jpeg, .png</b>).
-        </div>
       </div>
     </div>
     <br>
-    <br>
-    <q-field label="Logo file">
-      <q-uploader color="primary" name="foo" url="/api/upload" extensions=".jpg, .jpeg, .png" hide-upload-button="true" auto-expand="true" ref="uploader" @uploaded="uploaded" :additional-fields="additionalFields"/>
-    </q-field>
-    <q-item-separator></q-item-separator>
-    <q-field
-      label="The logo description"
-      helper="Logo description"
-      error-label="We need a valid email"
-      :count="100">
-      <q-input v-model="logoDescription" />
-    </q-field>
-    <q-item-separator></q-item-separator>
-    <q-field
-      label="Pub key"
-      helper="Your Aeternity account public key.">
-      <q-input v-model="pubKey" />
-    </q-field>
-    <q-item-separator></q-item-separator>
-    <q-field
-      label="Private key"
-      helper="Your Aeternity account private key - don't worry this information will not leave outside your browser.">
-      <q-input type="password" v-model="privKey" />
-    </q-field>
-    <q-item-separator></q-item-separator>
     <div class="row justify-center items-end">
-      <div class="column">
-        <q-btn
-          @click="submitLogo"
-          label="Submit"
-          color="primary"
-        />
+      <div class="col-6">
+        <commission-info-card :commission-id="$route.params.commissionId"></commission-info-card>
+      </div>
+      <div class="col-6">
+        <div class="q-display-1 text-center">
+          Upload the logo file (allowed formats <b>.jpg, .jpeg, .png</b>).
+        </div>
+        <upload-logo-form></upload-logo-form>
       </div>
     </div>
   </q-page>
@@ -55,11 +29,13 @@ import * as Crypto from '@aeternity/aepp-sdk/es/utils/crypto'
 import Ae from '@aeternity/aepp-sdk/es/ae/universal' // or any other flavor
 import MemoryAccount from '@aeternity/aepp-sdk/es/account/memory'
 import LogonityContractCode from '../domain/model/LogonityContract';
-import LogonityContractAbi from '../domain/model/LogonityContractAbi';
 import Mixin from '../mixins/global-mixin';
+import CommissionInfoCard from '../components/CommissionInfoCard';
+import UploadLogoForm from '../components/UploadLogoForm';
 
 export default {
   name: 'SubmitNewLogo',
+  components: {UploadLogoForm, CommissionInfoCard},
   data() {
     return {
       logoDescription: '',
@@ -68,20 +44,7 @@ export default {
     }
   },
   mixins: [Mixin],
-  computed: {
-    additionalFields() {
-      return [
-        {
-          name: 'description',
-          value: 'Kon rafal wspolbieznia przyjaźni',
-        },
-        {
-          name: 'jazda',
-          value: 'prosto w dupe',
-        }
-      ]
-    },
-  },
+
   mounted() {
 
   },
@@ -108,26 +71,18 @@ export default {
       //   url: 'https://sdk-testnet.aepps.com',
       //   internalUrl: 'https://sdk-testnet.aepps.com',
       //   accounts: [
-      //     MemoryAccount({keypair: {secretKey: this.privKey, publicKey: this.pubKey}})
+      //     MemoryAccount({
+      //       keypair: {
+      //         publicKey: 'ak_2paxkmqp5wgAc76oxsR6UDLwk4tscTSfMpoNtYyGMZrkX74bdC',
+      //         secretKey: '79b92dc302df1ab4d394573d9dc26b01f49391d0580eff3b54f61dac7b14c6c7efbeb0b66ed5bc063b20ed3fdac729a4d9569aef7b55cfe923588e93fa34a5d9'
+      //       }
+      //     })
       //   ],
       // }).then(ae => {
-      //   this.ae = ae;
-      //   return ae.contractCompile(LogonityContractCode);
-      // }).then(bytecode => {
-      //   return bytecode.deploy({initState: `("${res.data.id}", "${this.logoDescription}")`, options: { amount: this.toAeInt(this.reward) }});
-      // }).then(deployed => {
-      //   this.post('/api/updateCreatedCommission', {
-      //     contractAddress: deployed.address,
-      //     logoDescription: this.logoDescription,
-      //     transactionHash: deployed.transaction,
-      //     id: res.data.id
-      //   }).subscribe((res) => {
-      //     this.showCommissionCreatedDialog(deployed.address);
-      //   }, (err) => {
-      //     this.showCommissionFailedDialog(deployed.address);
-      //   });
-      //   console.log(`Contract deployed at ${JSON.stringify(deployed)}`);
-      //
+      //   ae.contractCall(this.$route.params.commissionId, 'sophia-address', this.$route.params.commissionId, 'submitProposal', {args: '("asdf")'})
+      //     .then(result => {
+      //       console.log('udalo sie', result);
+      //     });
       // });
     }
   }

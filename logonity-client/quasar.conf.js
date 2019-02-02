@@ -71,6 +71,20 @@ module.exports = function (ctx) {
         'QItemSeparator',
         'QItemTile',
         'QSpinnerAudio',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardMedia',
+        'QCardSeparator',
+        'QCardActions',
+        'QCarousel',
+        'QCarouselSlide',
+        'QCarouselControl',
+        'QChip',
+        'QTabs',
+        'QTab',
+        'QTabPane',
+        'QRouteTab'
       ],
       directives: [
         'Ripple'

@@ -5,12 +5,11 @@
 </template>
 
 <script>
-import GlobalMixin from './mixins/global-mixin'
+import './index';
 
 export default {
-  mixins: [GlobalMixin],
-  name: 'App'
-}
+  name: 'App',
+};
 </script>
 
 <style>
