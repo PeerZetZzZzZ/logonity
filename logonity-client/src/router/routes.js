@@ -14,13 +14,6 @@ const routes = [
     ],
   },
   {
-    path: '/submitNewLogo/:commissionId',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/SubmitNewLogo.vue') },
-    ],
-  },
-  {
     path: '/logoInfo/:commissionId',
     component: () => import('layouts/MyLayout.vue'),
     children: [
@@ -28,7 +21,7 @@ const routes = [
     ],
   },
   {
-    path: '/chooseLogo/:commissionId',
+    path: '/chooseLogo/:proposalId',
     component: () => import('layouts/MyLayout.vue'),
     children: [
       { path: '', component: () => import('pages/ChooseLogo.vue') },

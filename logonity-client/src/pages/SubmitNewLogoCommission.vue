@@ -12,6 +12,9 @@
     </div>
     <br>
     <br>
+    <q-card>
+      <q-card-main>
+
     <div class="row justify-end">
       <div class="column">
         <q-chip icon-right="attach_money" color="primary" small>
@@ -20,10 +23,9 @@
         <q-chip icon-right="attach_money" color="secondary" small>
           Balance after: {{balanceAfter}} Ae
         </q-chip>
-
       </div>
     </div>
-    <div class="row justify-center">
+    <div class="row justify-center" v-if="!lockButton">
       <div class="col-12">
         <q-field
           label="Pub key"
@@ -57,40 +59,43 @@
         <q-item-separator></q-item-separator>
       </div>
     </div>
+    <loading v-else></loading>
     <br>
     <div class="row justify-center">
       <div class="column">
         <q-btn
           :disabled="
-          balanceAfter < 0 ||
-          !Number.isInteger(Number(reward)) ||
-          logoDescription.trim() === ''"
+          balanceAfter <= 0 ||
+          (!Number.isInteger(Number(reward)) || reward === null) ||
+          logoDescription.trim() === '' ||
+          lockButton"
           @click="createSubmission"
           label="Upload submission"
           color="primary"/>
       </div>
     </div>
-
+      </q-card-main>
+    </q-card>
   </q-page>
 </template>
 
 <script>
 /* eslint-disable */
-import Ae from '@aeternity/aepp-sdk/es/ae/universal' // or any other flavor
-import MemoryAccount from '@aeternity/aepp-sdk/es/account/memory'
 import LogonityContractCode from '../domain/model/LogonityContract';
 import Mixin from '../mixins/global-mixin';
+import Loading from '../components/common/Loading';
 
 export default {
   name: 'SubmitNewLogoCommission',
+  components: {Loading},
   data() {
     return {
       logoDescription: '',
-      pubKey: 'ak_2igXQ7pQgH5YDv4zP9ciq1R3qW8pNaGgywqYnwRPrBhKhYxgeG',
+        pubKey: 'ak_2igXQ7pQgH5YDv4zP9ciq1R3qW8pNaGgywqYnwRPrBhKhYxgeG',
       privKey: '02a9f1e976b83b5cdf34279e9068fc7f352a5b49144fd96e7546390ff20a7a14e256c3ecea141842c37f9686fa0558faf71388dc473f5d69891d9ea2ee2cb671',
       reward: null,
       availableBalance: 0,
-      ae: null,
+      lockButton: false,
     }
   },
   computed: {
@@ -101,7 +106,6 @@ export default {
   mixins: [Mixin],
   watch: {
     pubKey() {
-      console.log('this', this.pubKey !== null && this.pubKey !== '');
       if (this.pubKey !== null && this.pubKey !== '') {
         this.get(`https://sdk-testnet.aepps.com/v2/accounts/${this.pubKey}`).subscribe((res) => {
           this.availableBalance = this.toAeFromAettos(res.data.balance);
@@ -114,20 +118,21 @@ export default {
       this.showMessageDialog('Commission created!',
         `Your commission has been uploaded to the network. Contract address: ${contractAddress}`);
     },
-    showCommissionFailedDialog(contractAddress) {
+    showCommissionFailedDialog() {
       this.showMessageDialog('Commission creation failed!',
-        `Your commission has been uploaded to the network. Contract address: ${contractAddress}`);
+        `Error occurred during commission creation.`);
     },
     showIsNotIntegerDialog(value) {
       this.showMessageDialog('Given reward is not integer value!',
         `The reward ${value} Ae must be integer. Please fix it.`);
     },
     createSubmission() {
+      this.lockButton = true;
       if (!Number.isInteger(Number(this.reward))) {
         this.showIsNotIntegerDialog(this.reward);
       } else {
         this.get('/api/createCommission').subscribe((res) => {
-          this.getAe({keypair: {secretKey: this.privKey, publicKey: this.pubKey}}, (ae) => {
+          this.getAePromise({secretKey: this.privKey, publicKey: this.pubKey}).then((ae) => {
             return ae.contractCompile(LogonityContractCode);
           }).then(bytecode => {
             return bytecode.deploy({
@@ -140,40 +145,15 @@ export default {
               logoDescription: this.logoDescription,
               transactionHash: deployed.transaction,
               id: res.data.id
-            }).subscribe((res) => {
+            }).subscribe((res2) => {
               this.showCommissionCreatedDialog(deployed.address);
+              this.$router.push(`/logoInfo/${res.data.id}`);
             }, (err) => {
               this.showCommissionFailedDialog(deployed.address);
             });
             console.log(`Contract deployed at ${JSON.stringify(deployed)}`);
           });
         });
-          // Ae({
-          //   debug: true,
-          //   url: 'https://sdk-testnet.aepps.com',
-          //   internalUrl: 'https://sdk-testnet.aepps.com',
-          //   accounts: [
-          //     MemoryAccount()
-          //   ],
-          // }).then(ae => {
-          //   this.ae = ae;
-          //   return ae.contractCompile(LogonityContractCode);
-          // }).then(bytecode => {
-          //   return bytecode.deploy({initState: `("${res.data.id}", "${this.logoDescription}")`, options: { amount: this.toAeInt(this.reward) }});
-          // }).then(deployed => {
-          //   this.post('/api/updateCreatedCommission', {
-          //     contractAddress: deployed.address,
-          //     logoDescription: this.logoDescription,
-          //     transactionHash: deployed.transaction,
-          //     id: res.data.id
-          //   }).subscribe((res) => {
-          //     this.showCommissionCreatedDialog(deployed.address);
-          //   }, (err) => {
-          //     this.showCommissionFailedDialog(deployed.address);
-          //   });
-          //   console.log(`Contract deployed at ${JSON.stringify(deployed)}`);
-          //
-          // });
       }
     }
   }

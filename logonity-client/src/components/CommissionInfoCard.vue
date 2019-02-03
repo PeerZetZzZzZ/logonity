@@ -7,23 +7,23 @@
     <q-card-main>
       <q-field
         helper="Commission ID">
-        <q-input readonly v-model="this.$route.params.commissionId" />
+        <q-input readonly v-model="commissionInfo.id" />
       </q-field>
       <q-field
         helper="Smart contract address">
-        <q-input readonly v-model="contractAddress" />
+        <q-input readonly v-model="commissionInfo.contract_address" />
       </q-field>
       <q-field
         helper="Description">
-        <q-input readonly v-model="logoDescription" />
+        <q-input readonly v-model="commissionInfo.logo_description" />
       </q-field>
       <q-field
         helper="Reward (Ae)">
-        <q-input readonly v-model="logoDescription" />
+        <q-input readonly v-model="reward" />
       </q-field>
       <q-field
         helper="Submitted logo proposals">
-        <q-input readonly v-model="submittedLogoProposalsLength" />
+        <q-input readonly v-model="commissionInfo.logoProposals.length" />
       </q-field>
       <q-btn
         icon="add"
@@ -39,25 +39,14 @@
 export default {
   name: 'commission-info-card',
   props: {
-    commissionId: {
+    commissionInfo: {
+      type: Object,
+      required: true,
+    },
+    reward: {
       type: String,
       required: true,
     },
-  },
-  data() {
-    return {
-      logoDescription: '',
-      contractAddress: '',
-      reward: 0,
-      submittedLogoProposalsLength: 0,
-    };
-  },
-  mounted() {
-    this.get(`/api/getCommissionInfo/${this.$route.params.commissionId}`).subscribe((res) => {
-      this.logoDescription = res.data.logo_description;
-      this.contractAddress = res.data.contract_address;
-      this.submittedLogoProposalsLength = res.data.logoProposals.length;
-    });
   },
 };
 </script>

@@ -58,3 +58,18 @@ exports.saveLogoProposal = (commissionId, logoComment, pictureOriginalName, pict
     }
   )
 };
+
+exports.deactivateLogoCommission = (commissionId, onSucceedCallback, onFailureCallback) => {
+  db.pool.query('UPDATE LOGO_COMMISSION SET ACTIVE = FALSE WHERE ID = $1',
+    [commissionId],
+    (err) => {
+      if (err) {
+        console.log(`Failed to insert logo commission!`, err);
+        onFailureCallback();
+      } else {
+        console.log(`Inserted new logo commission!`);
+        onSucceedCallback();
+      }
+    }
+  )
+};

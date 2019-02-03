@@ -26,10 +26,10 @@ export default {
       return moment(date).format('MM-DD HH:mm:ss');
     },
     toAeInt(aeIntNumber) {
-      return Number(aeIntNumber) * (10 ** 17);
+      return Number(aeIntNumber) * (10 ** 18);
     },
     toAeFromAettos(amount) {
-      return Number(amount) / Number(10 ** 18).toFixed(1);
+      return (Number(amount) / Number(10 ** 18)).toFixed(1);
     },
     getAe(keyPair, callback) {
       Ae({
@@ -38,6 +38,13 @@ export default {
         keypair: keyPair,
       }).then((ae) => {
         callback(ae);
+      });
+    },
+    getAePromise(keyPair) {
+      return Ae({
+        url: this.properties.nodeUrl,
+        internalUrl: this.properties.nodeUrl,
+        keypair: keyPair,
       });
     },
     showMessageDialog(title, message) {
