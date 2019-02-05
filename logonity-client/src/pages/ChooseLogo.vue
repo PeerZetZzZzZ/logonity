@@ -33,6 +33,7 @@
             </div>
           </div>
           <br>
+          <proividing-keys-is-safe-message></proividing-keys-is-safe-message>
           <q-item-separator></q-item-separator>
           <br>
           <div class="row justify-end items-end">
@@ -96,10 +97,11 @@
 import { chooseLogo } from '../domain/service/logonity-contract-api';
 import Loading from '../components/common/Loading';
 import Info from '../components/common/Info';
+import ProividingKeysIsSafeMessage from '../components/ProvidingKeysIsSafeMessage';
 
 export default {
   name: 'choose-logo',
-  components: { Info, Loading },
+  components: { ProividingKeysIsSafeMessage, Info, Loading },
   data() {
     return {
       downloaded: false,

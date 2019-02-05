@@ -10,10 +10,13 @@
         </div>
       </div>
     </div>
+
     <br>
     <br>
     <q-card v-if="!lockButton">
       <q-card-main>
+        <proividing-keys-is-safe-message></proividing-keys-is-safe-message>
+
         <div class="row justify-end">
           <div class="column">
             <q-chip icon-right="attach_money" color="primary" small>
@@ -83,15 +86,16 @@
 import LogonityContractCode from '../domain/model/LogonityContract';
 import Mixin from '../mixins/global-mixin';
 import Loading from '../components/common/Loading';
+import ProividingKeysIsSafeMessage from '../components/ProvidingKeysIsSafeMessage';
 
 export default {
   name: 'SubmitNewLogoCommission',
-  components: {Loading},
+  components: {ProividingKeysIsSafeMessage, Loading},
   data() {
     return {
       logoDescription: '',
-      pubKey: 'ak_2igXQ7pQgH5YDv4zP9ciq1R3qW8pNaGgywqYnwRPrBhKhYxgeG',
-      privKey: '02a9f1e976b83b5cdf34279e9068fc7f352a5b49144fd96e7546390ff20a7a14e256c3ecea141842c37f9686fa0558faf71388dc473f5d69891d9ea2ee2cb671',
+      pubKey: '',
+      privKey: '',
       reward: null,
       availableBalance: 0,
       lockButton: false,

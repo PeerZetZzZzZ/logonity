@@ -1,6 +1,8 @@
 <template>
   <q-card>
     <q-card-main v-show="!lockButton && !uploaded">
+      <proividing-keys-is-safe-message></proividing-keys-is-safe-message>
+      <br>
       <q-field label="Logo file*">
         <q-uploader
           color="primary"
@@ -59,10 +61,11 @@
 import { submitProposal } from '../domain/service/logonity-contract-api';
 import Loading from './common/Loading';
 import Info from './common/Info';
+import ProividingKeysIsSafeMessage from './ProvidingKeysIsSafeMessage';
 
 export default {
   name: 'upload-logo-form',
-  components: { Info, Loading },
+  components: {ProividingKeysIsSafeMessage, Info, Loading },
   props: {
     commissionId: {
       type: String,
@@ -79,9 +82,8 @@ export default {
       fileAdded: false,
       lockButton: false,
       logoComment: '',
-      pubKey: 'ak_2paxkmqp5wgAc76oxsR6UDLwk4tscTSfMpoNtYyGMZrkX74bdC',
-      privKey: '79b92dc302df1ab4d394573d9dc26b01f49391d0580eff3b54f61dac7b14c6c7efbeb0b66ed5bc063b20ed3fdac729a' +
-        '4d9569aef7b55cfe923588e93fa34a5d9',
+      pubKey: '',
+      privKey: '',
     };
   },
   computed: {

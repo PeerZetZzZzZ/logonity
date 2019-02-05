@@ -27,6 +27,13 @@ const routes = [
       { path: '', component: () => import('pages/ChooseLogo.vue') },
     ],
   },
+  {
+    path: '/howItWorks',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/HowItWorks.vue') },
+    ],
+  },
 ];
 
 // Always leave this as last one

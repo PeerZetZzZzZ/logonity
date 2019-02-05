@@ -23,7 +23,7 @@
     <q-layout-drawer v-model="leftDrawerOpen" content-class="sideBarBody">
       <q-list no-border link inset-delimiter>
         <q-list-header class="secondaryColor">About</q-list-header>
-        <q-item @click.native="openURL('http://quasar-framework.org')" class="secondaryColor">
+        <q-item to="/howItWorks" class="secondaryColor">
           <q-item-side class="secondaryColor" icon="school"/>
           <q-item-main class="secondaryColor" label="How it works"/>
         </q-item>
@@ -32,6 +32,9 @@
           <q-item-main label="Author" sublabel="https://pthomann.pl"/>
         </q-item>
       </q-list>
+      <q-list-header style="color: white">Network: TESTNET</q-list-header>
+
+      <span>TESTNET</span>
     </q-layout-drawer>
 
     <q-page-container>
