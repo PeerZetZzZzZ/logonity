@@ -12,7 +12,7 @@
           <img class="cursorPointer" src="../assets/logonityLogo.png" @click="$router.push('/')">
         <q-toolbar-title>
           <div slot="subtitle">
-            Logonity - decentralized logo marketplace built on Aeternity blockchain.
+            Logonity 1.0 (Alpha) - decentralized logo marketplace built on Aeternity blockchain.
           </div>
         </q-toolbar-title>
         <q-btn to="/submitNewLogoCommission"
@@ -32,9 +32,8 @@
           <q-item-main label="Author" sublabel="https://pthomann.pl"/>
         </q-item>
       </q-list>
-      <q-list-header style="color: white">Network: TESTNET</q-list-header>
+      <q-list-header style="color: white">Network: TESTNET <br> Version: 1.0 Alpha</q-list-header>
 
-      <span>TESTNET</span>
     </q-layout-drawer>
 
     <q-page-container>
