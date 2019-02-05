@@ -57,7 +57,7 @@ app.express.get('/getCommissionInfo/:commissionId', function (req, res)  {
 });
 
 app.express.get('/picture/:pictureName', function(req, res) {
-  res.sendFile(path.resolve(`uploads/${req.params.pictureName}_watermark`));
+  res.sendFile(path.resolve(`uploads/${req.params.pictureName}`));
 });
 
 app.express.get('/picture64/:pictureName', function(req, res) {
@@ -76,6 +76,5 @@ app.express.get('/deactivateCommission/:commissionId/:proposalId', function(req,
     LogonityReadRepository.getLogoProposalPictureName(req.params.proposalId, (row) => {
       res.send(row);
     });
-    res.sendStatus(200);
   }, () => res.sendStatus(500));
 });

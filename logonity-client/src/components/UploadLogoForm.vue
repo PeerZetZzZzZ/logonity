@@ -19,7 +19,7 @@
         label="Comment"
         helper="Provide optional comment to the uploaded logo."
         :count="100">
-        <q-input v-model="logoComment"/>
+        <q-input maxlength="100" v-model="logoComment"/>
       </q-field>
       <q-item-separator></q-item-separator>
       <q-field
@@ -35,7 +35,7 @@
         <q-input type="password" v-model="privKey"/>
       </q-field>
       <q-item-separator></q-item-separator>
-      <span color="secondary">* - required</span>
+      <span style="color: var(--colorPrimary)">* - required</span>
       <div class="row justify-center items-end">
         <div class="column">
           <q-btn
