@@ -42,9 +42,6 @@ module.exports = function (ctx) {
         '/api': {
           target: 'http://localhost:6788',
           changeOrigin: true,
-          pathRewrite: {
-            '^/api': ''
-          }
         }
       }
     },
