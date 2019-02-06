@@ -2,21 +2,21 @@
   <q-page padding>
     <div class="row justify-center items-end">
       <div class="column">
-        <div class="q-display-3 text-center">
+        <div :class="$q.platform.is.mobile ?
+            'q-display-1 text-center': 'q-display-3 text-center'">
           Submit logo commission
         </div>
-        <div class="q-display-1 text-center">
-          Describe desired logo and provide reward.
+        <div :class="$q.platform.is.mobile ?
+            'q-subheader text-center': 'q-display-1 text-center'">
+          Describe desired logo and provide reward
         </div>
       </div>
     </div>
-
-    <br>
     <br>
     <q-card v-if="!lockButton">
       <q-card-main>
         <proividing-keys-is-safe-message></proividing-keys-is-safe-message>
-
+        <br>
         <div class="row justify-end">
           <div class="column">
             <q-chip icon-right="attach_money" color="primary" small>

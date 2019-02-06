@@ -9,7 +9,8 @@
           <q-icon name="menu"/>
         </q-btn>
 
-          <img class="cursorPointer" src="../assets/logonityLogo.png" @click="$router.push('/')">
+          <img class="cursorPointer" src="../assets/logonityLogo.png"
+               @click="$router.push('/')" :style="$q.platform.is.mobile ? 'width: 25%': ''">
         <q-toolbar-title>
           <div slot="subtitle">
             Logonity 1.0 (Alpha) - decentralized logo marketplace built on Aeternity blockchain.

@@ -25,13 +25,6 @@
         helper="Submitted logo proposals">
         <q-input readonly v-model="commissionInfo.logoProposals.length" />
       </q-field>
-      <q-btn
-        icon="add"
-        style="margin: 2%"
-        :to="{ path: `/submitNewLogo/${$route.params.commissionId}`}"
-        label="Submit logo"
-        color="primary">
-      </q-btn>
     </q-card-main>
   </q-card>
 </template>

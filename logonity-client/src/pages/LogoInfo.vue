@@ -10,11 +10,13 @@
       <q-tab-pane name="tab-1">
         <div class="row justify-center items-end">
           <div class="col-12">
-            <div class="q-display-3 text-center">
+            <div :class="$q.platform.is.mobile ?
+            'q-display-1 text-center': 'q-display-3 text-center'">
               Commission info
             </div>
           </div>
         </div>
+        <br>
         <div class="row justify-center items-end">
           <div class="col-12">
             <commission-info-card
@@ -28,11 +30,13 @@
       <q-tab-pane name="tab-2">
         <div class="row justify-center items-end">
           <div class="col-12">
-            <div class="q-display-3 text-center">
+            <div :class="$q.platform.is.mobile ?
+            'q-display-1 text-center': 'q-display-3 text-center'">
               Current proposals
             </div>
           </div>
         </div>
+        <br>
         <div class="row justify-center items-end">
           <div class="col-12">
             <logo-carousel v-if="commissionInfo !== null"
@@ -44,14 +48,17 @@
       <q-tab-pane name="tab-3">
         <div class="row justify-center items-end">
           <div class="col-12">
-            <div class="q-display-3 text-center">
+            <div :class="$q.platform.is.mobile ?
+            'q-display-1 text-center': 'q-display-3 text-center'">
               Upload logo
             </div>
-            <div class="q-display-1 text-center">
+            <div :class="$q.platform.is.mobile ?
+            'q-subheader text-center': 'q-display-1 text-center'">
               Upload the logo file (allowed formats <b>.jpg, .jpeg, .png</b>).
             </div>
           </div>
         </div>
+        <br>
         <div class="row justify-center items-end" v-if="commissionInfo !== null">
           <div class="col-12">
             <upload-logo-form :commission-id="$route.params.commissionId"

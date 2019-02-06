@@ -1,8 +1,9 @@
 <template>
-  <q-page>
-    <div class="row justify-center items-end">
+  <q-page padding>
+    <div class="row justify-center items-center">
       <div class="column">
-        <img src="../assets/activeLogoCommissions2.png">
+        <img style="margin: 0 auto;" src="../assets/activeLogoCommissions2.png"
+             :style="$q.platform.is.mobile ? 'width: 50%;': ''">
       </div>
     </div>
     <div class="row justify-center">
@@ -15,16 +16,15 @@
             <q-item-main class="primaryColor">
               <q-item-tile>
                 <span class="secondaryColor">
-                  <b>Commission description: </b>
-                </span>
+                  <b>Commission description</b>
+                </span><br>
                 <span class="primaryColor">
-                  <b>{{activeCommission.logo_description}}</b>
+                  {{activeCommission.logo_description}}
                 </span>
               </q-item-tile>
               <br>
-              <q-chip icon="access_time" color="primary" small square>
-                Created: {{formatDate(activeCommission.creation_time)}}
-              </q-chip>
+              <span class="float-left">Created:
+                {{formatDate(activeCommission.creation_time)}}</span>
             </q-item-main>
             <q-chip icon-right="attach_money" color="primary" small>
               Reward: {{activeCommission.reward}} Ae

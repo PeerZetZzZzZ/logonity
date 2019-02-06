@@ -4,7 +4,7 @@
       <q-alert type="positive">
         Providing your public and private keys is safe.
         These information are used only in your browser.
-        None else see them!
+        Better solution will be provided ASAP.
       </q-alert>
     </div>
   </div>
