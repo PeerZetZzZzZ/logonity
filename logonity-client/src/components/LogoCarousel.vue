@@ -8,9 +8,13 @@
           <div class="row justify-center items-end">
             <div class="column">
               <q-card-media>
-                <img :src="logoProposal.imageSrc"
-                     v-if="logoProposal.imageSrc !== undefined"
-                     style="height: 350px; width: 350px;">
+                <div class="outerImageContainer" >
+                  <div class="innerImageContainer">
+                    <img :src="logoProposal.imageSrc"
+                         v-if="logoProposal.imageSrc !== undefined"
+                         class="innerImage">
+                  </div>
+                </div>
               </q-card-media>
             </div>
           </div>
@@ -58,8 +62,23 @@ export default {
   },
 };
 </script>
-<style>
-  .custom-caption {
-    padding-left: 5%;
+<style scoped>
+  .outerImageContainer {
+    height: 350px;
+    width: 350px;
+    display: table;
+  }
+
+  .innerImageContainer {
+    width: 100%;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .innerImage {
+    max-width: 100%;
+    height: auto;
+    left: 50%;
   }
 </style>

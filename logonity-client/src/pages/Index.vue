@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="row justify-center items-center">
       <div class="column">
-        <img style="margin: 0 auto;" src="../assets/activeLogoCommissions2.png"
+          <img style="margin: 0 auto;" src="../assets/activeLogoCommissions2.png"
              :style="$q.platform.is.mobile ? 'width: 50%;': ''">
       </div>
     </div>
