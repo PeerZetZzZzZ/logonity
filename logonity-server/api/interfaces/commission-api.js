@@ -10,9 +10,13 @@ var fs = require('fs');
 app.express.post('/api/upload',upload.single('foo'), function(req, res) {
   console.log(req.body); // the uploaded file object
   console.log(req.file); // the uploaded file object
-  watermark.embedWatermark(req.file.path, {'text' : 'Logonity', dstPath: `${req.file.path}_watermark`}, function(err) {
-    console.log('Error occurred during embed watermark: ', err);
-  });
+  try {
+    watermark.embedWatermark(req.file.path, {'text' : 'Logonity', dstPath: `${req.file.path}_watermark`}, function(err) {
+      console.log('Error occurred during embed watermark: ', err);
+    });
+  } catch(err) {
+    console.log('z.lapalem: ', err);
+  }
   LogonitySaveRepository.saveLogoProposal(req.body.commissionId, req.body.logoComment, req.body.fileName, req.file.filename, req.file.mimetype, req.file.size,
     (id) => {
       res.send(id);
